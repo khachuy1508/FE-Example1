@@ -1,13 +1,13 @@
 <template>
-  <div v-if="renderTab === 'MostTotal'">
+  <div>
       <v-row>
         <div v-for="(item,index) in filterCovidData" :key="index">
           <v-col>
             <div>
-              <v-card min-width="200px">
+              <v-card width="250px">
                 <v-card-text>
                   <div>
-                    <p >
+                    <p class="text-overline mb-4 ">
                       {{item.Country}}
                     </p>
                   </div>
@@ -26,16 +26,13 @@
       </v-row>
         
   </div>
-  <div v-else-if="renderTab === 'HighestNumber'"><highest-death /></div>
-  <div v-else-if="renderTab === 'LeastRecoverd'"><least-recoverd /></div>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent, watch, useContext, computed, toRefs} from '@nuxtjs/composition-api'
 import HighestDeath from './HighestDeath.vue'
 import LeastRecoverd from './LeastRecoverd.vue'
 import MostTotalcase from './MostTotalcase.vue'
-import {useContext} from '@nuxtjs/composition-api';
-import {onMounted} from '@nuxtjs/composition-api'
+
 export default defineComponent({
   components: {
     HighestDeath,
@@ -44,24 +41,37 @@ export default defineComponent({
   },
   
   props: {
-    selectedTab: { type: String, default: 'MostTotal' },
+    selectedTab: { type: String, default: '' },
   },
+
   setup(props) {
-    const { store } = useContext();
-    const renderTab = props.selectedTab
-    function filterData() {
-      store.dispatch('covid/getDataCovid')
-    }
-    onMounted(() => {
-      filterData()
-    })
-    return { renderTab }
+    const { store } = useContext(); 
 
+    const filterCovidData = computed(() => store.getters['covid/dataCovid'])
+
+    watch(
+      () => props.selectedTab,
+      (value) => {
+        store.dispatch('covid/sortDataCovid', {title: value})
+      },
+      {immediate : true }
+    )
+  
+    return { 
+      filterCovidData,
+     }
 
   },
-  computed:{
-    filterCovidData(): any {
-      return this.$store.getters[`covid/ListCovid`]
-    }}
+  // watch:{
+  //     renderTab: function(renderTab){
+  //     console.log(1111,'change')
+
+  //       // this.$store.dispatch('covid/sortDataCovid', {title: renderTab})
+  //     }
+  //   },
+  // computed:{
+  //   filterCovidData(): any {
+  //     return this.$store.getters[`covid/dataCovid`]
+  //   }}
 })
 </script>

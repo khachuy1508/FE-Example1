@@ -51,17 +51,21 @@ export const state = ():State => ({
   
   export const mutations = {
     storeCovid(state: State, data: Covid) {
-        state.ListCovid.Countries = data.Countries
+        state.ListCovid.Countries = data.Countries.sort((a: Countries,b: Countries) => a.TotalConfirmed > b.TotalConfirmed ? -1 : 1  )
         state.ListCovid.Global = data.Global
     },
-    sortCovid(state: State, data: Covid, title: string){
-        switch (title){
+    sortCovid(state: State, payload: {title: string}){
+
+        switch (payload.title){
             case "MostTotal":
-                state.ListCovid.Countries = data.Countries.sort((a: Countries,b: Countries) => a.TotalConfirmed > b.TotalConfirmed ? 1 : -1  )
+                state.ListCovid.Countries = state.ListCovid.Countries.sort((a: Countries,b: Countries) => a.TotalConfirmed > b.TotalConfirmed ? -1 : 1  )
+                break;
             case "HighestNumber":
-                state.ListCovid.Countries = data.Countries.sort((a: Countries,b: Countries) => a.TotalDeaths > b.TotalDeaths ? 1 : -1  )
+                state.ListCovid.Countries = state.ListCovid.Countries.sort((a: Countries,b: Countries) => a.TotalDeaths > b.TotalDeaths ? -1 : 1  )
+                break;
             case "LeastRecoverd":
-                state.ListCovid.Countries = data.Countries.sort((a: Countries,b: Countries) => a.TotalRecovered > b.TotalRecovered ? 1 : -1  )
+                state.ListCovid.Countries = state.ListCovid.Countries.sort((a: Countries,b: Countries) => a.TotalRecovered > b.TotalRecovered ? 1 : -1  )
+                break;
         }
     },
 }
@@ -71,7 +75,7 @@ export const state = ():State => ({
         const response = await axios.get(`https://api.covid19api.com/summary`)
         if(response.data) {commit('storeCovid', response.data)}
     },
-    sortDataCovid: async ({ commit }, payload: {data: State, title: string }) => {
-        commit('sortCovid', {data: payload.data, title: payload.title})
+    sortDataCovid: async ({ commit }, payload: {title: string }) => {
+        commit('sortCovid', { title: payload.title})
     },
   };
