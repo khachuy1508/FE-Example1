@@ -20,6 +20,24 @@ export type Countries = {
     Date: String;
 }
 
+export type ListName = {
+    common: String;
+    official: String;
+}
+
+export type Flags = {
+    png: String;
+    svg: String;
+}
+export type CountryType = {
+    name: ListName;
+    capital: String[];
+    region: String;
+    subregion: String;
+    flags: Flags;
+    population: Number;
+}
+
 export type Covid  = {
     Global: Global;
     Countries: Countries[];
@@ -27,6 +45,7 @@ export type Covid  = {
 
 export type State  = {
     ListCovid: Covid
+    Country: CountryType
 }
 
 import { ActionContext, ActionTree } from 'vuex';
@@ -41,12 +60,29 @@ export const state = ():State => ({
         Global:{},
         Countries: []
     },
+    Country: {
+        name: {
+            common: '',
+            official: ''
+        },
+        capital: [],
+        region: '',
+        subregion: '',
+        flags: {
+            png:'',
+            svg:'',
+        },
+        population: 0
+    }
   })
   
   export const getters = {
     dataCovid(state: State) {
         return state.ListCovid.Countries
     },
+    dataCountry(state: State){
+        return state.Country
+    }
   }
   
   export const mutations = {
@@ -68,6 +104,11 @@ export const state = ():State => ({
                 break;
         }
     },
+    storeCountry(state: State, data: CountryType) {
+        state.Country=data
+        console.log(1111,data)
+
+    },
 }
 
   export const actions: Actions<State, State> = {
@@ -77,5 +118,9 @@ export const state = ():State => ({
     },
     sortDataCovid: async ({ commit }, payload: {title: string }) => {
         commit('sortCovid', { title: payload.title})
+    },
+    getDataCountry: async ({ commit }, payload: {countryCode: String}) => {
+        const response = await axios.get(`https://restcountries.com/v3.1/alpha/${payload.countryCode}`)
+        if(response.data && response.data.length) {commit('storeCountry', response.data[0])}
     },
   };
