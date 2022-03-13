@@ -11,40 +11,42 @@
     </v-tabs>
 
     <v-tabs-items v-model="tab">
-      <v-tab-item v-for="item in items" :key="item.tab">
-        <v-card color="basil" flat>
-          <v-card-text
-            ><tab-selected :selected-tab="items[tab].content"  />
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
+      <v-card color="basil" flat>
+        <v-card-text
+          ><tab-selected :selected-tab="items[tab].content" />
+        </v-card-text>
+      </v-card>
     </v-tabs-items>
   </v-card>
 </template>
 
 <script lang="ts">
 import TabSelected from './TabSelected.vue'
-import {useContext, onMounted, ref, defineComponent, } from '@nuxtjs/composition-api';
+import {
+  useContext,
+  onMounted,
+  ref,
+  defineComponent,
+} from '@nuxtjs/composition-api'
 export default defineComponent({
   components: { TabSelected },
-  
-  setup(){
-    const tab = ref<number>(0)
-    
-    const items = [
-        { tab: 'The most total confirmed cases', content: 'MostTotal' },
-        { tab: 'The highest number of deaths', content: 'HighestNumber' },
-        {
-          tab: 'The least number of recovered cases',
-          content: 'LeastRecoverd',
-        },
-      ]
 
-    const { store } = useContext();
+  setup() {
+    const tab = ref<number>(0)
+
+    const items = [
+      { tab: 'The most total confirmed cases', content: 'MostTotal' },
+      { tab: 'The highest number of deaths', content: 'HighestNumber' },
+      {
+        tab: 'The least number of recovered cases',
+        content: 'LeastRecoverd',
+      },
+    ]
+
+    const { store } = useContext()
     function filterData() {
       store.dispatch('covid/getDataCovid')
     }
-
 
     onMounted(() => {
       filterData()
@@ -54,7 +56,7 @@ export default defineComponent({
       tab,
       items,
     }
-  }
+  },
 })
 </script>
 

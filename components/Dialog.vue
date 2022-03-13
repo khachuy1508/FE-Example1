@@ -7,7 +7,7 @@
         max-width="600"
       >
         <template v-slot:activator="{ attrs }">
-          <v-btn v-bind="attrs" @click="handleOpenDialog">OK</v-btn>
+          <v-btn v-bind="attrs" @click="handleOpenDialog">Detail</v-btn>
         </template>
         <v-card>
           <v-toolbar color="primary" dark>{{
@@ -15,7 +15,7 @@
           }}</v-toolbar>
           <v-card-text>
             <v-row class="row-custom-title">
-              <p class="text-overline mb-4 ">
+              <p class="text-overline mb-4">
                 Official: {{ filterDataCountry.name.official }}
               </p></v-row
             >
@@ -82,7 +82,7 @@ export default defineComponent({
   },
 })
 </script>
-<style >
+<style>
 .row-custom-title {
   margin-top: 0px !important;
   justify-content: center;
