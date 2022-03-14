@@ -32,15 +32,13 @@
   </v-card>
 </template>
 <script lang="ts">
-import { defineComponent,PropType } from '@nuxtjs/composition-api'
-import {CountryType} from 'store/covid'
+import { defineComponent, PropType } from '@nuxtjs/composition-api'
+import { CountryType } from 'store/covid'
 
 export default defineComponent({
-    props: {
-        filterDataCountry: {type : Object as PropType<CountryType>}
-    },
-    setup() {
-        
-    },
+  props: {
+    filterDataCountry: { type: Object as PropType<CountryType> },
+  },
+  setup() {},
 })
 </script>

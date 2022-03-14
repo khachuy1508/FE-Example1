@@ -14,14 +14,12 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@nuxtjs/composition-api'
 import { ref } from '@nuxtjs/composition-api'
-import {CountryPeriod} from 'store/covid'
-import {
-watch,
-} from '@nuxtjs/composition-api'
+import { CountryPeriod } from 'store/covid'
+import { watch } from '@nuxtjs/composition-api'
 export default defineComponent({
   props: {
-    dataCountryPeriod: { type: Array as PropType<CountryPeriod[]>},
-    countryName: {type: String}
+    dataCountryPeriod: { type: Array as PropType<CountryPeriod[]> },
+    countryName: { type: String },
   },
   setup(props) {
     let Confirmed: Number[] = []
@@ -29,7 +27,7 @@ export default defineComponent({
     let Recovered: Number[] = []
     const DateConfirm: Date[] = []
 
-  watch(
+    watch(
       () => props.dataCountryPeriod,
       (value) => {
         Confirmed = []
@@ -45,7 +43,6 @@ export default defineComponent({
       { immediate: true }
     )
 
-    
     const series = ref([
       {
         name: 'Confirmed',
@@ -98,22 +95,22 @@ export default defineComponent({
         },
       },
       xaxis: {
-        categories: DateConfirm
+        categories: DateConfirm,
       },
       tooltip: {
-        theme: "dark",
+        theme: 'dark',
         y: [
           {
             title: {
               formatter: function (val: string) {
-                return val 
+                return val
               },
             },
           },
           {
             title: {
               formatter: function (val: string) {
-                return val 
+                return val
               },
             },
           },

@@ -141,7 +141,7 @@ export const mutations = {
   storeCountryPeriod(state: State, data: CountryPeriod[]) {
     state.CountryPeriod = data
   },
-  
+
 }
 
 export const actions: Actions<State, State> = {
