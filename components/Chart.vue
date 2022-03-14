@@ -32,7 +32,6 @@ export default defineComponent({
   watch(
       () => props.dataCountryPeriod,
       (value) => {
-        console.log(1111,value)
         Confirmed = []
         Deaths = []
         Recovered = []
@@ -42,7 +41,6 @@ export default defineComponent({
           Recovered.push(item.Recovered)
           DateConfirm.push(item.Date)
         })
-        console.log(1111,Confirmed.length)
       },
       { immediate: true }
     )
