@@ -157,7 +157,7 @@ export const actions: Actions<State, State> = {
     }
   },
   getDataPeriod: async ({ commit }, payload: { Slug: string }) => {
-    // Do data quá nhiều nên chỉ lấy từ 01/01/2022 => 14/3/2022
+    // get Data from 01/01/2021 => 14/3/2022 because data very large
     const response = await axios.get(`https://api.covid19api.com/country/${payload.Slug}?from=2022-01-01T00:00:00Z&to=2022-03-14T00:00:00Z`)
     if (response.data) {
       commit(
