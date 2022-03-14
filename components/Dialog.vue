@@ -9,37 +9,32 @@
         <template v-slot:activator="{ attrs }">
           <v-btn v-bind="attrs" @click="handleOpenDialog">Detail</v-btn>
         </template>
-        <v-card>
-          <v-toolbar color="primary" dark>{{
-            filterDataCountry.name.common
-          }}</v-toolbar>
-          <v-card-text>
-            <v-row class="row-custom-title">
-              <p class="text-overline mb-4">
-                Official: {{ filterDataCountry.name.official }}
-              </p></v-row
-            >
-            <v-row class="row-custom">
-              <v-col cols="6"
-                ><p>Capital: {{ filterDataCountry.capital[0] }}</p></v-col
-              >
-              <v-col cols="6"
-                ><p>Region: {{ filterDataCountry.region }}</p></v-col
-              >
-              <v-col cols="6"
-                ><p>Subregion: {{ filterDataCountry.subregion }}</p></v-col
-              >
-              <v-col cols="6"
-                ><p>Population: {{ filterDataCountry.population }}</p></v-col
-              >
-            </v-row>
+        <v-carousel hide-delimiter-background show-arrows-on-hover>
+          <v-carousel-item>
+            <v-sheet>
+              <v-row class="fill-height" align="center" justify="center">
+                <div>
+                  <detail-country
+                    :filter-data-country="filterDataCountry"
+                  ></detail-country>
+                </div>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
 
-            <v-img :src="filterDataCountry.flags.png"></v-img>
-          </v-card-text>
-          <v-card-actions class="justify-end">
-            <v-btn text @click="dialog = false">Close</v-btn>
-          </v-card-actions>
-        </v-card>
+          <v-carousel-item>
+            <v-sheet>
+              <v-row class="row-custom" align="center" justify="center">
+                <div>
+                  <chart
+                    :data-country-period="filterDataCountryPeriod"
+                    :country-name="filterDataCountry.name.common"
+                  ></chart>
+                </div>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+        </v-carousel>
       </v-dialog>
     </v-col>
   </v-row>
@@ -52,31 +47,43 @@ import {
   computed,
   ref,
 } from '@nuxtjs/composition-api'
+import Chart from './Chart.vue'
+import DetailCountry from './DetailCountry.vue'
 
 export default defineComponent({
   props: {
     CountryCode: { type: String, default: '' },
+    Slug: { type: String, defaule: '' },
   },
-
+  components: {
+    Chart,
+    DetailCountry,
+  },
   setup(props) {
     const { store } = useContext()
 
     const dialog = ref<boolean>(false)
 
     const filterDataCountry = computed(() => store.getters['covid/dataCountry'])
-
+    const filterDataCountryPeriod = computed(
+      () => store.getters['covid/dataCountryPeriod']
+    )
     const handleOpenDialog = async () => {
       await getDataCountry()
       dialog.value = true
+      getDataCountryPeriod()
     }
     const getDataCountry = () =>
       store.dispatch('covid/getDataCountry', { countryCode: props.CountryCode })
+
+    const getDataCountryPeriod = () =>
+      store.dispatch('covid/getDataPeriod', { Slug: props.Slug })
 
     return {
       filterDataCountry,
       getDataCountry,
       dialog,
-
+      filterDataCountryPeriod,
       handleOpenDialog,
     }
   },

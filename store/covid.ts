@@ -37,9 +37,26 @@ export type Covid = {
   Countries: Countries[]
 }
 
+export type CountryPeriod = {
+  ID: String
+  Country: String
+  CountryCode: String
+  Province: String
+  City: String
+  CityCode: String
+  Lat: String
+  Lon: String
+  Confirmed: Number
+  Deaths: Number
+  Recovered: Number
+  Active: String
+  Date: Date
+}
+
 export type State = {
   ListCovid: Covid
   Country: CountryType
+  CountryPeriod: CountryPeriod[]
 }
 
 export interface Actions<S, R> extends ActionTree<S, R> {
@@ -64,6 +81,7 @@ export const state = (): State => ({
     },
     population: 0,
   },
+  CountryPeriod: []
 })
 
 export const getters = {
@@ -73,6 +91,9 @@ export const getters = {
   dataCountry(state: State) {
     return state.Country
   },
+  dataCountryPeriod(state: State) {
+    return state.CountryPeriod
+  }
 }
 
 export const mutations = {
@@ -117,6 +138,10 @@ export const mutations = {
   storeCountry(state: State, data: CountryType) {
     state.Country = data
   },
+  storeCountryPeriod(state: State, data: CountryPeriod[]) {
+    state.CountryPeriod = data
+  },
+  
 }
 
 export const actions: Actions<State, State> = {
@@ -128,6 +153,16 @@ export const actions: Actions<State, State> = {
         response.data.Countries.sort((a: Countries, b: Countries) =>
           a.TotalConfirmed > b.TotalConfirmed ? -1 : 1
         )
+      )
+    }
+  },
+  getDataPeriod: async ({ commit }, payload: { Slug: string }) => {
+    // Do data quá nhiều nên chỉ lấy từ 01/01/2022 => 14/3/2022
+    const response = await axios.get(`https://api.covid19api.com/country/${payload.Slug}?from=2022-01-01T00:00:00Z&to=2022-03-14T00:00:00Z`)
+    if (response.data) {
+      commit(
+        'storeCountryPeriod',
+        response.data
       )
     }
   },

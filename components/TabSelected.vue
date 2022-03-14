@@ -18,7 +18,7 @@
                 <div>
                   <v-row>
                     <v-col cols="4">
-                      <Dialog :country-code="item.CountryCode" />
+                      <Dialog :country-code="item.CountryCode" :Slug="item.Slug" />
                     </v-col>
                     <v-col cols="8" class="button-right">
                       <v-btn text icon color="blue lighten-2">
