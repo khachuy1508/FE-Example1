@@ -112,13 +112,13 @@ export const mutations = {
       case 'MostTotal':
         state.ListCovid.Countries = state.ListCovid.Countries.sort(
           (a: Countries, b: Countries) =>
-            a.TotalConfirmed > b.TotalConfirmed ? -1 : 1
+            a.TotalConfirmed < b.TotalConfirmed ? 1 : -1
         )
         break
       case 'HighestNumber':
         state.ListCovid.Countries = state.ListCovid.Countries.sort(
           (a: Countries, b: Countries) =>
-            a.TotalDeaths > b.TotalDeaths ? -1 : 1
+            a.TotalDeaths < b.TotalDeaths ? 1 : -1
         )
         break
       case 'LeastRecoverd':
@@ -151,13 +151,13 @@ export const actions: Actions<State, State> = {
       commit(
         'storeCovid',
         response.data.Countries.sort((a: Countries, b: Countries) =>
-          a.TotalConfirmed > b.TotalConfirmed ? -1 : 1
+          a.TotalConfirmed < b.TotalConfirmed ? 1 : -1
         )
       )
     }
   },
   getDataPeriod: async ({ commit }, payload: { Slug: string }) => {
-    // get Data from 01/01/2021 => 14/3/2022 because data very large
+    // get Data from 01/01/2021 => 14/3/2022 because data is large
     const response = await axios.get(`https://api.covid19api.com/country/${payload.Slug}?from=2022-01-01T00:00:00Z&to=2022-03-14T00:00:00Z`)
     if (response.data) {
       commit(
